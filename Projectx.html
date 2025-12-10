@@ -1,181 +1,770 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Solo Leveling Data Analyzer</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: url('https://images6.alphacoders.com/133/thumb-1920-1337257.jpeg') no-repeat center center fixed;
-      background-size: cover;
-      color: #fff;
-    }
-    .container {
-      background: rgba(0,0,0,0.85);
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 0 20px #00f7ff, 0 0 40px #00f7ff;
-      width: 560px;
-      text-align: center;
-      border: 2px solid #00f7ff;
-    }
-    h2 {
-      margin-bottom: 15px;
-      color: #00f7ff;
-      text-shadow: 0 0 10px #00f7ff, 0 0 20px #00f7ff;
-    }
-    label {
-      font-weight: bold;
-      color: #00f7ff;
-    }
-    input, select, button {
-      margin: 8px 0;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #00f7ff;
-      background: rgba(0,0,0,0.6);
-      color: #00f7ff;
-      width: 90%;
-      font-weight: bold;
-      box-shadow: 0 0 10px #00f7ff inset;
-    }
-    button {
-      background: #00f7ff;
-      color: black;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.3s;
-      box-shadow: 0 0 10px #00f7ff, 0 0 20px #00f7ff;
-    }
-    button:hover {
-      background: #0ff;
-      color: #111;
-      box-shadow: 0 0 20px #00f7ff, 0 0 40px #00f7ff;
-    }
-    table {
-      width: 100%;
-      margin-top: 20px;
-      border-collapse: collapse;
-      color: #fff;
-      font-weight: bold;
-    }
-    th, td {
-      border: 1px solid #00f7ff;
-      padding: 8px;
-      text-align: center;
-    }
-    th {
-      background: rgba(0, 247, 255, 0.3);
-      color: #00f7ff;
-      text-shadow: 0 0 10px #00f7ff;
-    }
-    tr:nth-child(even) {
-      background: rgba(255,255,255,0.05);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FF Tournament Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #c471f5 75%, #667eea 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header with date and time */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #fff, #f0f0f0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 2px;
+        }
+
+        .datetime {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        /* Login Page Styles */
+        .login-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 70vh;
+        }
+
+        .login-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 50px;
+            text-align: center;
+            background: linear-gradient(90deg, #fff, #e0e0e0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .login-options {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 50px 40px;
+            width: 320px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .login-card:hover::before {
+            left: 100%;
+        }
+
+        .login-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .login-card i {
+            font-size: 3.5rem;
+            margin-bottom: 25px;
+            color: #fff;
+        }
+
+        .login-card h3 {
+            font-family: 'Space Grothesk', sans-serif;
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .login-card p {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        /* Registration Form Styles */
+        .registration-container {
+            display: none;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        }
+
+        .welcome-section {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .welcome-section h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            background: linear-gradient(90deg, #fff, #e0e0e0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .form-section h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 1rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .uid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 22px;
+            height: 22px;
+            margin-right: 12px;
+            cursor: pointer;
+            accent-color: #fff;
+        }
+
+        .checkbox-group label {
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .alternative-player {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+            gap: 25px;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            font-size: 0.9rem;
+            margin-top: 8px;
+            display: none;
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .success-message {
+            display: none;
+            background: rgba(46, 213, 115, 0.2);
+            border: 1px solid rgba(46, 213, 115, 0.5);
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 20px;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .login-options {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .datetime {
+                align-items: center;
+            }
+
+            .login-title {
+                font-size: 2rem;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+            padding: 15px 30px;
+            border-radius: 50px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            transition: bottom 0.3s ease;
+            z-index: 2000;
+            font-weight: 500;
+        }
+
+        .toast.show {
+            bottom: 30px;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h2>⚔️ Data Analyzer ⚔️</h2>
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+    </div>
 
-    <label>Upload Excel File:</label>
-    <input type="file" id="upload" accept=".xlsx,.xls"><br>
+    <div class="toast" id="toast"></div>
 
-    <label>Select Date:</label>
-    <input type="date" id="dateFilter"><br>
+    <div class="container">
+        <header class="header">
+            <div class="logo">FF TOURNAMENT</div>
+            <div class="datetime">
+                <div id="date"></div>
+                <div id="time"></div>
+            </div>
+        </header>
 
-    <label>Select Column:</label>
-    <select id="columnSelect">
-      <option value="Remarks">Remarks</option>
-      <option value="Sno">Sno</option>
-      <option value="Date">Date</option>
-      <option value="Number">Number</option>
-      <option value="Time">Time</option>
-      <option value="Name">Name</option>
-      <option value="Age">Age</option>
-      <option value="Problem">Problem</option>
-      <option value="Location">Location</option>
-    </select><br>
+        <!-- Login Page -->
+        <div class="login-container" id="loginPage">
+            <h1 class="login-title">Welcome to FF Tournament Portal</h1>
+            <div class="login-options">
+                <div class="login-card" id="registerTournament">
+                    <i class="fas fa-trophy"></i>
+                    <h3>Register Tournament</h3>
+                    <p>Join the competition and show your skills</p>
+                </div>
+                <div class="login-card" id="redeemRewards">
+                    <i class="fas fa-gift"></i>
+                    <h3>Redeem Rewards</h3>
+                    <p>Claim your prizes and achievements</p>
+                </div>
+            </div>
+        </div>
 
-    <button onclick="analyze()">Analyze</button>
-    <div id="output"></div>
-  </div>
+        <!-- Registration Form -->
+        <div class="registration-container" id="registrationForm">
+            <div class="welcome-section">
+                <h2>Welcome to FF Tournament Registration</h2>
+                <p>Fill in the details below to register your team for the tournament</p>
+            </div>
 
-  <script>
-    let excelData = [];
+            <form id="tournamentForm">
+                <div class="form-section">
+                    <h3><i class="fas fa-users"></i> Team Details</h3>
+                    <div class="form-group">
+                        <label for="teamName">Team Name</label>
+                        <input type="text" id="teamName" name="teamName" required>
+                        <div class="error-message" id="teamNameError">Please enter a valid team name</div>
+                    </div>
+                </div>
 
-    document.getElementById('upload').addEventListener('change', handleFile, false);
+                <div class="form-section">
+                    <h3><i class="fas fa-id-badge"></i> Player Details</h3>
+                    <div class="uid-container">
+                        <div class="form-group">
+                            <label for="uid1">UID 1 (Team Leader)</label>
+                            <input type="text" id="uid1" name="uid1" required>
+                            <div class="error-message" id="uid1Error">Please enter a valid UID</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="uid2">UID 2</label>
+                            <input type="text" id="uid2" name="uid2" required>
+                            <div class="error-message" id="uid2Error">Please enter a valid UID</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="uid3">UID 3</label>
+                            <input type="text" id="uid3" name="uid3" required>
+                            <div class="error-message" id="uid3Error">Please enter a valid UID</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="uid4">UID 4</label>
+                            <input type="text" id="uid4" name="uid4" required>
+                            <div class="error-message" id="uid4Error">Please enter a valid UID</div>
+                        </div>
+                    </div>
 
-    function handleFile(e) {
-      const file = e.target.files[0];
-      const reader = new FileReader();
-      reader.onload = function(event) {
-        const data = new Uint8Array(event.target.result);
-        const workbook = XLSX.read(data, { type: 'array' });
-        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-        excelData = XLSX.utils.sheet_to_json(firstSheet, { defval: "" });
-        alert("✅ File loaded successfully!");
-      };
-      reader.readAsArrayBuffer(file);
-    }
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="hasAlternative" name="hasAlternative">
+                        <label for="hasAlternative">Add Alternative Player (5th Player)</label>
+                    </div>
 
-    function analyze() {
-      const dateInput = document.getElementById("dateFilter").value;
-      const column = document.getElementById("columnSelect").value;
+                    <div class="alternative-player" id="alternativePlayer">
+                        <div class="form-group">
+                            <label for="uid5">UID 5 (Alternative Player)</label>
+                            <input type="text" id="uid5" name="uid5">
+                            <div class="error-message" id="uid5Error">Please enter a valid UID</div>
+                        </div>
+                    </div>
+                </div>
 
-      if (!dateInput) {
-        alert("Please select a date");
-        return;
-      }
+                <div class="form-section">
+                    <h3><i class="fas fa-info-circle"></i> Contact Information</h3>
+                    <div class="form-group">
+                        <label for="instagramId">Instagram ID</label>
+                        <input type="text" id="instagramId" name="instagramId" placeholder="@yourusername" required>
+                        <div class="error-message" id="instagramIdError">Please enter a valid Instagram ID</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="your@email.com" required>
+                        <div class="error-message" id="emailError">Please enter a valid email address</div>
+                    </div>
+                </div>
 
-      const chosenDate = new Date(dateInput);
-      const formattedDate = 
-        String(chosenDate.getDate()).padStart(2,'0') + "-" +
-        String(chosenDate.getMonth()+1).padStart(2,'0') + "-" +
-        chosenDate.getFullYear();
+                <div class="form-section">
+                    <h3><i class="fas fa-shield-alt"></i> Acknowledgment</h3>
+                    <p style="margin-bottom: 15px;">Game Soul Rules: By registering, you acknowledge that you have read and agree to abide by all tournament rules and regulations.</p>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="acknowledgeRules" name="acknowledgeRules" required>
+                        <label for="acknowledgeRules">I acknowledge and agree to the Game Soul Rules</label>
+                    </div>
+                    <div class="error-message" id="acknowledgeError">You must acknowledge the rules to proceed</div>
+                </div>
 
-      let counts = {};
-      let total = 0;
+                <div class="btn-container">
+                    <button type="button" class="btn btn-secondary" id="backBtn">Back</button>
+                    <button type="submit" class="btn" id="submitBtn">Submit Registration</button>
+                </div>
+            </form>
 
-      excelData.forEach(row => {
-        let rowDate = row["Date"];
-        if (!rowDate) return;
+            <div class="success-message" id="successMessage">
+                <h3>Registration Successful!</h3>
+                <p>Your team has been registered for the FF Tournament. Check your email for confirmation.</p>
+            </div>
+        </div>
+    </div>
 
-        if (rowDate instanceof Date) {
-          rowDate = 
-            String(rowDate.getDate()).padStart(2,'0') + "-" +
-            String(rowDate.getMonth()+1).padStart(2,'0') + "-" +
-            rowDate.getFullYear();
+    <script>
+        // Date and Time Display
+        function updateDateTime() {
+            const now = new Date();
+            const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            
+            document.getElementById('date').textContent = now.toLocaleDateString('en-US', dateOptions);
+            document.getElementById('time').textContent = now.toLocaleTimeString('en-US', timeOptions);
         }
 
-        if (rowDate == formattedDate) {
-          if (row[column]) {
-            const value = row[column].toString().trim().toLowerCase();
-            if (value) {
-              counts[value] = (counts[value] || 0) + 1;
-              total++;
-            }
-          }
-        }
-      });
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
 
-      let output = "<table><tr><th>" + column + "</th><th>Count</th></tr>";
-      Object.entries(counts)
-        .sort((a,b) => b[1]-a[1])
-        .forEach(([v,c]) => {
-          output += `<tr><td>${v}</td><td>${c}</td></tr>`;
+        // Toast Notification
+        function showToast(message, duration = 3000) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, duration);
+        }
+
+        // Page Navigation
+        const loginPage = document.getElementById('loginPage');
+        const registrationForm = document.getElementById('registrationForm');
+        const registerTournamentBtn = document.getElementById('registerTournament');
+        const redeemRewardsBtn = document.getElementById('redeemRewards');
+        const backBtn = document.getElementById('backBtn');
+        const loading = document.getElementById('loading');
+
+        registerTournamentBtn.addEventListener('click', () => {
+            showLoading();
+            setTimeout(() => {
+                loginPage.style.display = 'none';
+                registrationForm.style.display = 'block';
+                hideLoading();
+            }, 800);
         });
-      output += `<tr><th>Total</th><th>${total}</th></tr></table>`;
 
-      document.getElementById("output").innerHTML = output;
-    }
-  </script>
+        redeemRewardsBtn.addEventListener('click', () => {
+            showLoading();
+            setTimeout(() => {
+                showToast('Redeem Rewards feature is coming soon!');
+                hideLoading();
+            }, 800);
+        });
+
+        backBtn.addEventListener('click', () => {
+            showLoading();
+            setTimeout(() => {
+                registrationForm.style.display = 'none';
+                loginPage.style.display = 'flex';
+                resetForm();
+                hideLoading();
+            }, 800);
+        });
+
+        // Alternative Player Checkbox
+        const hasAlternativeCheckbox = document.getElementById('hasAlternative');
+        const alternativePlayerDiv = document.getElementById('alternativePlayer');
+
+        hasAlternativeCheckbox.addEventListener('change', () => {
+            if (hasAlternativeCheckbox.checked) {
+                alternativePlayerDiv.style.display = 'block';
+            } else {
+                alternativePlayerDiv.style.display = 'none';
+                document.getElementById('uid5').value = '';
+            }
+        });
+
+        // Form Validation and Email Submission
+        const tournamentForm = document.getElementById('tournamentForm');
+        const successMessage = document.getElementById('successMessage');
+
+        tournamentForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            let isValid = true;
+            
+            // Validate team name
+            const teamName = document.getElementById('teamName').value.trim();
+            if (teamName.length < 3) {
+                showError('teamNameError');
+                isValid = false;
+            } else {
+                hideError('teamNameError');
+            }
+            
+            // Validate UIDs
+            for (let i = 1; i <= 4; i++) {
+                const uid = document.getElementById(`uid${i}`).value.trim();
+                if (uid.length < 5) {
+                    showError(`uid${i}Error`);
+                    isValid = false;
+                } else {
+                    hideError(`uid${i}Error`);
+                }
+            }
+            
+            // Validate alternative player if checkbox is checked
+            if (hasAlternativeCheckbox.checked) {
+                const uid5 = document.getElementById('uid5').value.trim();
+                if (uid5.length < 5) {
+                    showError('uid5Error');
+                    isValid = false;
+                } else {
+                    hideError('uid5Error');
+                }
+            }
+            
+            // Validate Instagram ID
+            const instagramId = document.getElementById('instagramId').value.trim();
+            if (instagramId.length < 2) {
+                showError('instagramIdError');
+                isValid = false;
+            } else {
+                hideError('instagramIdError');
+            }
+            
+            // Validate email
+            const email = document.getElementById('email').value.trim();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showError('emailError');
+                isValid = false;
+            } else {
+                hideError('emailError');
+            }
+            
+            // Validate acknowledgment
+            const acknowledgeRules = document.getElementById('acknowledgeRules').checked;
+            if (!acknowledgeRules) {
+                showError('acknowledgeError');
+                isValid = false;
+            } else {
+                hideError('acknowledgeError');
+            }
+            
+            if (isValid) {
+                showLoading();
+                
+                // Create email body
+                const uid5 = hasAlternativeCheckbox.checked ? document.getElementById('uid5').value : 'N/A';
+                const emailBody = `
+FF TOURNAMENT REGISTRATION
+
+Registration Date: ${new Date().toLocaleString()}
+
+TEAM DETAILS:
+Team Name: ${teamName}
+
+PLAYER UIDs:
+UID 1 (Leader): ${document.getElementById('uid1').value}
+UID 2: ${document.getElementById('uid2').value}
+UID 3: ${document.getElementById('uid3').value}
+UID 4: ${document.getElementById('uid4').value}
+UID 5 (Alternative): ${uid5}
+
+CONTACT INFORMATION:
+Instagram ID: ${instagramId}
+Email: ${email}
+
+Rules Acknowledged: Yes
+                `;
+                
+                // Create mailto link
+                const mailtoLink = `mailto:yuva410api@gmail.com?subject=FF Tournament Registration - ${teamName}&body=${encodeURIComponent(emailBody)}`;
+                
+                // Open email client
+                window.location.href = mailtoLink;
+                
+                // Show success message
+                setTimeout(() => {
+                    tournamentForm.style.display = 'none';
+                    successMessage.style.display = 'block';
+                    hideLoading();
+                    showToast('Opening email client... Please send the email to complete registration.');
+                    
+                    // Reset form after 5 seconds
+                    setTimeout(() => {
+                        successMessage.style.display = 'none';
+                        tournamentForm.style.display = 'block';
+                        resetForm();
+                    }, 5000);
+                }, 1000);
+            }
+        });
+
+        function showError(elementId) {
+            document.getElementById(elementId).style.display = 'block';
+        }
+
+        function hideError(elementId) {
+            document.getElementById(elementId).style.display = 'none';
+        }
+
+        function resetForm() {
+            tournamentForm.reset();
+            alternativePlayerDiv.style.display = 'none';
+            successMessage.style.display = 'none';
+            
+            // Hide all error messages
+            const errorMessages = document.querySelectorAll('.error-message');
+            errorMessages.forEach(msg => msg.style.display = 'none');
+        }
+
+        function showLoading() {
+            loading.style.display = 'flex';
+        }
+
+        function hideLoading() {
+            loading.style.display = 'none';
+        }
+    </script>
 </body>
-</html>
+  </html>
